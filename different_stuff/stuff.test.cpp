@@ -3,6 +3,11 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <cmath>
+#include <fstream>
+
+const short int value = 20;
+const char ch = -10;
 
 using namespace std;
 
@@ -36,6 +41,93 @@ public:
 };
 
 class R : public T {};
+
+class First {
+protected:
+  First(int val) {
+    this->value = val;
+    std::cout << "value is: " << this->value << std::endl;
+  };
+  int value;
+  ~First() {};
+};
+
+class Second : public First {
+public:
+  Second(int val) : First(val) {}
+};
+
+class _ {};
+
+class A {
+public:
+  A(void) {};
+  A(char a, char b, char c) {
+    this->y = (int)a;
+    this->m = (int)b;
+    this->d = (int)c;
+  };
+  void msg() {
+    std::cout << this->y << this->m << this->d << std::endl;
+  };
+  ~A() {
+    std::cout << "instance of class A" << '\n';
+  }
+private:
+  int y, m, d;
+};
+
+class b;
+
+class a {
+  friend int sum(a, b);
+private:
+  int i;
+public:
+  a() {
+    std::cout << "enter value for i: ";
+    std::cin >> this->i;
+  }
+  ~a() {
+    std::cout << "class a" << '\n';
+  }
+};
+
+class b {
+  friend int sum(a, b);
+private:
+  int g;
+public:
+  b() {
+    std::cout << "enter value for g: ";
+    std::cin >> this->g;
+  }
+  ~b() {
+    std::cout << "class b" << '\n';
+  }
+};
+
+class p;
+class d {
+  friend class p;
+private:
+  int h = 100;
+};
+
+class p {
+public:
+  void change_h(d* _d) {
+    _d->h += 20;
+    std::cout << "h is: " << _d->h << std::endl;
+  }
+  void print_values(d* _d) {
+    std::cout << "value of _d.h is: " << (*_d).h << std::endl;
+  }
+};
+
+int sum(a first, b second) {
+  return first.i + second.g;
+}
 
 int main() {
   cout << "hello world" << endl;
@@ -190,6 +282,25 @@ int main() {
   std::cout << "enter value: ";
   std::cout << "your value: " << string << '\n';
 
+  std::ofstream w_file;
+  w_file.open("test.txt", std::ios_base::out);
+  if (w_file.is_open()) {
+    w_file << "hello word" << std::endl;
+    w_file.close();
+  } else std::cout << "err while opening file" << '\n';
+
+  char text[50];
+  std::ifstream r_file;
+  r_file.open("test.txt", std::ios_base::in);
+  if (r_file.is_open())
+    std::cout << "file is not found" << '\n';
+  else {
+    r_file >> text;
+    std::cout << text << '\n';
+    r_file.getline(text, 50);
+    std::cout << text << '\n';
+    r_file.close();
+  }
   return 0;
 }
 
