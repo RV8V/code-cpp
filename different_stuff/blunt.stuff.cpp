@@ -14,6 +14,9 @@ void f_cpp_un(...) {}
 void f_cpp(int *p) { srand(time(NULL)); *p = (rand() % 10) + 1; }
 void f_cpp(int &a) { srand(time(NULL)); a = (rand() % 10) + 1; }
 
+#define C_PI 3.14138731
+constexpr double CPP_PI = 3.14138731;
+constexpr double CPP_PI_E = CPP_PI / 2.;
 const double e_i = 0.;
 constexpr double ext = ((((const double)exp(e_i) / 0.789651) / exp(e_i * 12.21)) * 3.1931636689) /
          (((exp(e_i / 2914.124) * e_i) / exp(e_i / 56.9137)) * exp(e_i * 139.91470));
