@@ -301,6 +301,23 @@ int main() {
     std::cout << text << '\n';
     r_file.close();
   }
+
+  Second _s(10);
+  d _d; p _p;
+  _p.change_h(&_d);
+  _p.print_values(&_d);
+
+  a first; b second;
+  std::cout << "friend value is: " << sum(first, second) << std::endl;
+  class _ {}; ::_ __;
+  ::A a('a', 'b', 'c'); a.msg();
+
+  const unsigned char value = 10;
+  const char ch = 10;
+  const char *r = "res: "; const char *s = "sin: "; const char *v = "value: ";
+  std::cout << r << abs(::ch) - pow(::ch, ::value) << std::endl \
+    << s << sin(::value) << std::endl \
+    << v << ::value << std::endl;
   return 0;
 }
 
