@@ -18,8 +18,11 @@ void f_cpp(int &a) { srand(time(NULL)); a = (rand() % 10) + 1; }
 constexpr double CPP_PI = 3.14138731;
 constexpr double CPP_PI_E = CPP_PI / 2.;
 const double e_i = 0.;
-constexpr double ext = ((((const double)exp(e_i) / 0.789651) / exp(e_i * 12.21)) * 3.1931636689) /
+constexpr double ext = ((((const double)exp(e_i) / 0.789651) / exp(e_i * 12.21)) * 3.1931636689) / \
          (((exp(e_i / 2914.124) * e_i) / exp(e_i / 56.9137)) * exp(e_i * 139.91470));
+constexpr double f_expr() {
+  return exp((CPP_PI * 10.9) / 21.13);
+}
 
 enum error_file_c { EFE_UNKNOWN = 0, EFE_NO, EFE_OPEN, CLOSE, EFE_CRASH };
 enum error_network_c { ENE_UNKNOWN = 0, ENE_NO, OPEN, ENE_CLOSE, ENE_LOST, ENE_CRASH };
