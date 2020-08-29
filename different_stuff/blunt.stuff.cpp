@@ -29,9 +29,22 @@ namespace n_ns { void ns_test(...) { std::cout << "this file: ns" << std::endl; 
 enum class error_file_f_s : unsigned char { UNKNOWN = 0, NO, OPEN, CLOSE, CRASH = 255 };
 enum class error_network_n_s : char { UNKNOWN = 0, NO, OPEN, CLOSE, CRASH = 127 };
 
+int input_i_value() {
+  int i_value = 0;
+  for(;;) {
+    std::cin >> i_value;
+    if (std::cin.fail() && !(std::cin.eof() || std::cin.bad())) {
+      std::cin.clear();
+      std::cin.ignore(numeric_limits<std::streamsize>::std::max(), std::endl);
+      std::cout << "input error" << std::endl;
+    } else break;
+  }
+  return i_value;
+}
+
 int main(int argc, char const **argv) {
-  auto un = 0;
-  int i = 256;
+  input_i_value();
+  auto un = 0; int i = 256;
   // char ch {i}, ch_i = i;
   // auto un_ch = ch;
   foo(10, 0); foo(.0f); foo(0.12); // foo(ch);
