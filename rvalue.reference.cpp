@@ -122,13 +122,13 @@ namespace example_e {
   }
 };
 
-/*template<class T>
+template<class T>
 typename remove_reference<T>::type&&
-move(T&& a) { return a; }*/
+move(T&& a) { return a; }
 
 int main(int argc, char const *argv[]) {
-  //example_a::test();
-  // example_b::test();
+  example_a::test();
+  example_b::test();
   example_c::test();
   example_c::data d1;
   example_c::data d2(d1);
