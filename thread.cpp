@@ -14,10 +14,10 @@
 #define NDEBUG
 #define LIMIT 10000
 #define KB_SIZE 1024
-#define UCH_SIZE_NOT 128
+#define UCH_SIZE_NOT 128 
 #define COUNT_R 10
 
-struct downloader { 
+struct downloader {
   void load(std::string url, size_t thread_count, size_t chuck_size) {
     if (!url.empty()) return;
     if (thread_count == SIZE_MAX) return;
