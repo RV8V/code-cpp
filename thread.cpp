@@ -8,12 +8,12 @@
 #include <future>
 #include <queue>
 #include <condition_variable>
-#include <string>
+#include <string> 
 #include <cassert>
 
 #define NDEBUG
 #define LIMIT 10000
-#define KB_SIZE 1024 
+#define KB_SIZE 1024
 #define UCH_SIZE_NOT 128
 #define COUNT_R 10
 
