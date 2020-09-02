@@ -9,9 +9,9 @@
 #include <queue>
 #include <condition_variable>
 #include <string>
-#include <cassert> 
+#include <cassert>
 
-#define NDEBUG
+#define NDEBUG 
 #define LIMIT 10000
 #define KB_SIZE 1024
 #define UCH_SIZE_NOT 128
