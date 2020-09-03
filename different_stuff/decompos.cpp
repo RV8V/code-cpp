@@ -2,11 +2,17 @@
 #include <vector>
 #include <tuple>
 #include <map>
+#include <mutex>
+#include <ctime>
+#include <cstring>
 
 #define VALUE_T 123.4f
 #define ID_T 1
 #define TEST_STR "gnusmas z60"
 #define FIRST_INDEX 0
+#define TEN_V 10
+#define THREE_V 3
+#define VALUE_TO_TEST 1
 
 struct unit {
   size_t id;
@@ -17,6 +23,9 @@ struct unit {
 
 void test(void);
 void print_info(const std::vector<unit>);
+bool is_exists(int, const std::map<int, std::string>);
+int get_char(bool);
+bool lock_mutex(bool);
 
 int main(int, char const**) {
   std::vector<unit> tanks{
@@ -25,6 +34,24 @@ int main(int, char const**) {
   test();
   print_info(tanks);
   return 0;
+}
+
+bool lock_mutex(bool st = false) {
+  std::mutex m;
+  bool is_changed{st};
+  if (std::lock_guard<std::mutex> l{m}; is_changed) return is_changed;
+  return ~is_changed;
+}
+
+bool is_exists(int key, const std::map<int, std::string> &data) {
+  if (auto it{data.find(key)}; it != data.end()) return true;
+  return false;
+}
+
+int get_char(bool f = false) {
+  srand(time(NULL));
+  if (char r{char(rand() % TEN_V - THREE_V)}; r == VALUE_TO_TEST && r) return 0;
+  return -1;
 }
 
 void print_info(const std::vector<unit> &u) {
@@ -45,7 +72,7 @@ void test(void) {
   }
   const auto &&[id, value, model]{std::make_tuple(ID_T, VALUE_T, TEST_STR)};
   std::map<size_t, std::string> phones {
-    {1, "a80"}, {2, "b34"}, {3, "c59"};
+    {1, "a80"}, {2, "b34"}, {3, "c59"}
   };
   for(const auto &[id, model]: phones) std::cout << "id" << id << " " << "model" << model << std::endl;
 }
