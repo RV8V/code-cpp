@@ -6,6 +6,14 @@
 #include <cmath>
 #include <fstream>
 
+#define NEW_LINE '\n'
+
+#if NULL
+using std::string;
+using std::cout;
+using std::endl;
+#endif
+
 const short int value = 20;
 const char ch = -10;
 
