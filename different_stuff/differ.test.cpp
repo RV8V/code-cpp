@@ -126,6 +126,67 @@ void test_a(void) begin std::cout << __FUNCTION__ << std::endl; end
 const char* param_f(const char* str) begin return str; end
 void print_data(const char*(*get_data)(const char*), const char* str) begin std::cout << (*get_data)(str) << std::endl; end
 
+class my_class
+begin
+private:
+  int *data;
+  int size;
+public:
+  my_class(int size)
+  begin
+    this->size = size;
+    this->data = new int[size];
+    for (int i = 0; i < size; i++)
+      *(this->data + i) = i;
+    std::cout << "my_class() constructor: " << this << std::endl;
+  end
+  ~my_class()
+  begin
+    delete[] this->data;
+    std::cout << "~my_class() destructor: " << this << std::endl;
+  end
+  my_class(const my_class &other)
+  begin
+    if (this->data != nullptr) delete[] this->data;
+    this->size = other.size;
+    this->data = new int[other.size];
+    for (int i = 0; i < other.size; i++)
+      *(this->data + i) = *(other.data + i);
+    std::cout << "constructor copy: " << this << std::endl;
+  end
+  my_class& operator=(const my_class &other)
+  begin
+    if (this == &other) return *this;
+    delete[] this->data;
+    this->size = other.size;
+    this->data = new int[other.size];
+    for (int i = 0; i < other.size; i++)
+      *(this->data + i) = *(other.data + i);
+    std::cout << "operator=" << '\n';
+    return *this;
+  end
+  bool operator==(const my_class &other)
+  begin
+    return this->size == other.size;
+  end
+  bool operator!=(const my_class &other)
+  begin
+    return !this->operator==(other);
+  end
+end;
+
+void cpy(my_class value)
+begin
+  std::cout << "call: " << __FUNCTION__ << std::endl;
+end
+
+my_class foo_a(void)
+begin
+  my_class tmp(10);
+  std::cout << "call: " << __FUNCTION__ << std::endl;
+  return tmp;
+end
+
 int main(int argc, char const** argv)
 begin
   const char* test_line = "err";
@@ -214,6 +275,19 @@ begin
   unsigned char i = 0;
   do std::cout << "i = " << (int)i << "  " << (char)i << NEW_LINE; while(i++ < 255);
 #endif
+  my_class a = {10};
+  my_class b = a;
+  cpy(obj);
+  foo_a();
+  my_class a(1);
+  my_class b(2);
+  my_class c(3);
+  a = b = c;
+  a.operator=(b).operator=(c);
+  a.operator=(b);
+  bool result = a.operator!=(b);
+  bool res = a == b;
+  std::cout << "result: " << result << '\n';
   return 0;
 end
 
