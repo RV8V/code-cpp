@@ -205,6 +205,8 @@ begin
   return tmp;
 end
 
+struct Test;
+
 struct Point
 begin
 private: int m_x, m_y;
@@ -257,6 +259,22 @@ public:
     this->m_x -= 1; this->m_y -= 1;
     return tmp;
   end
+  friend void change_state(Point&, Test&);
+end
+
+struct Test
+begin
+private:
+  int data = 0;
+  friend void change_state(Point&, Test&);
+end;
+
+void change_state(Point& point, Test& test)
+begin
+  std::cout << "friend function: " << __FUNCTION__ << std::endl;
+  point.m_x = rand() % 10;
+  point.m_y = rand() % 10;
+  test.data = 1;
 end
 
 int main(int argc, char const** argv)
