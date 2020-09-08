@@ -277,6 +277,27 @@ begin
   test.data = 1;
 end
 
+class Apple;
+class Human
+begin
+public:
+  void take_apple(Apple& apple);
+end;
+
+class Apple
+begin
+public:
+  Apple(int weight, std::string color)
+  begin
+    this->weight = weight;
+    this->color = color;
+  end;
+  friend void Human::take_apple(Apple&);
+private:
+  int weight;
+  std::string color;
+end;
+
 int main(int argc, char const** argv)
 begin
   const char* test_line = "err";
@@ -393,3 +414,8 @@ begin
 end
 
 template<typename T1, typename T2> inline const int sum(T1 v1, T2 v2) begin return v1 + v2; end
+
+void Human::take_apple(Apple& apple)
+begin
+  std::cout << __FUNCTION__ << std::endl << "weight: " << apple.weight << std::endl << "color: " << apple.color << std::endl;
+end
