@@ -138,6 +138,7 @@ public:
   my_class& operator=(const my_class &);
   bool operator==(const my_class &);
   bool operator!=(const my_class &);
+  int& operator[](int)
 end
 
 my_class::my_class(int size)
@@ -185,6 +186,11 @@ end
 bool my_class::operator!=(const my_class &other)
 begin
   return !this->operator==(other);
+end
+
+int& my_class::operator[](int i)
+begin
+  return *(this->data + i);
 end
 
 void cpy(my_class value)
@@ -250,10 +256,6 @@ public:
     Point tmp{*this};
     this->m_x -= 1; this->m_y -= 1;
     return tmp;
-  end
-  int& operator[](int i)
-  begin
-    return *(this->data + i);
   end
 end
 
