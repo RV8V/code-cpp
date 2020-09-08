@@ -251,6 +251,10 @@ public:
     this->m_x -= 1; this->m_y -= 1;
     return tmp;
   end
+  int& operator[](int i)
+  begin
+    return *(this->data + i);
+  end
 end
 
 int main(int argc, char const** argv)
@@ -345,6 +349,7 @@ begin
   my_class b = a;
   cpy(obj);
   foo_a();
+  a.operator[](1);
   my_class a(1);
   my_class b(2);
   my_class c(3);
