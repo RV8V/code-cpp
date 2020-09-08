@@ -199,6 +199,60 @@ begin
   return tmp;
 end
 
+struct Point
+begin
+private: int m_x, m_y;
+public:
+  Point(): m_x{0}, m_y{0} begin std::cout << "Point() constructor by default" << std::endl; end;
+  Point(int x, int y): m_x{x}, m_y{y} begin std::cout << "Point() constructor" << std::endl; end
+  Point(const Point &point)
+  begin
+    std::cout << "copy constructor" << std::endl;
+    this->m_x = point.m_x;
+    this->m_y = point.m_y;
+  end
+  ~Point(void) begin std::cout << "~Point() destructor" << std::endl; end
+  Point& operator=(const Point &point)
+  begin
+    if (this == &point) return *this;
+    std::cout << "operator=" << std::endl;
+    this->m_x = point.m_x;
+    this->m_y = point.m_y;
+    return *this;
+  end
+  Point operator+(const Point &point)
+  begin
+    std::cout << "operator+" << std::endl;
+    Point tmp{this->m_x + point.m_x, this->m_y + point.m_y};
+    return tmp;
+  end
+  Point& operator++(void)
+  begin
+    std::cout << "operator++ pre" << std::endl;
+    this->m_y++; this->m_x++;
+    return *this;
+  end
+  Point operator++(int)
+  begin
+    std::cout << "operator++ post" << std::endl;
+    Point tmp{*this};
+    this->m_x++; this->m_y++;
+    return tmp;
+  end
+  Point& operator--(void) {
+    std::cout << "operator-- pre" << std::endl;
+    this->m_y -= 1; this->m_x -= 1;
+    return *this;
+  end
+  Point operator--(int)
+  begin
+    std::cout << "operator-- post" << std::endl;
+    Point tmp{*this};
+    this->m_x -= 1; this->m_y -= 1;
+    return tmp;
+  end
+end
+
 int main(int argc, char const** argv)
 begin
   const char* test_line = "err";
@@ -300,6 +354,16 @@ begin
   bool result = a.operator!=(b);
   bool res = a == b;
   std::cout << "result: " << result << '\n';
+
+  Point a = {1, 2};
+  Point b = {3, 4};
+  a.operator=(b);
+  Point c = b;
+  Point c = a.operator+(b);
+  a.operator++(); ++a;
+  b.operator++(); b++;
+  a.operator--(); --a;
+  b.operator--(); b--;
   return 0;
 end
 
