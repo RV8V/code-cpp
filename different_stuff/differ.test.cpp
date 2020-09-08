@@ -129,51 +129,63 @@ void print_data(const char*(*get_data)(const char*), const char* str) begin std:
 class my_class
 begin
 private:
-  int *data;
+  int* data;
   int size;
 public:
-  my_class(int size)
-  begin
-    this->size = size;
-    this->data = new int[size];
-    for (int i = 0; i < size; i++)
-      *(this->data + i) = i;
-    std::cout << "my_class() constructor: " << this << std::endl;
-  end
-  ~my_class()
-  begin
-    delete[] this->data;
-    std::cout << "~my_class() destructor: " << this << std::endl;
-  end
-  my_class(const my_class &other)
-  begin
-    if (this->data != nullptr) delete[] this->data;
-    this->size = other.size;
-    this->data = new int[other.size];
-    for (int i = 0; i < other.size; i++)
-      *(this->data + i) = *(other.data + i);
-    std::cout << "constructor copy: " << this << std::endl;
-  end
-  my_class& operator=(const my_class &other)
-  begin
-    if (this == &other) return *this;
-    delete[] this->data;
-    this->size = other.size;
-    this->data = new int[other.size];
-    for (int i = 0; i < other.size; i++)
-      *(this->data + i) = *(other.data + i);
-    std::cout << "operator=" << '\n';
-    return *this;
-  end
-  bool operator==(const my_class &other)
-  begin
-    return this->size == other.size;
-  end
-  bool operator!=(const my_class &other)
-  begin
-    return !this->operator==(other);
-  end
-end;
+  my_class(int);
+  my_class(const my_class &);
+  ~my_class(void);
+  my_class& operator=(const my_class &);
+  bool operator==(const my_class &);
+  bool operator!=(const my_class &);
+end
+
+my_class::my_class(int size)
+begin
+  this->size = size;
+  this->data = new int[size];
+  for (int i = 0; i < size; i++)
+    *(this->data + i) = i;
+  std::cout << "my_class() constructor: " << this << std::endl;
+end
+
+my_class::~my_class()
+begin
+  delete[] this->data;
+  std::cout << "~my_class() destructor: " << this << std::endl;
+end
+
+my_class::my_class(const my_class &other)
+begin
+  if (this->data != nullptr) delete[] this->data;
+  this->size = other.size;
+  this->data = new int[other.size];
+  for (int i = 0; i < other.size; i++)
+    *(this->data + i) = *(other.data + i);
+  std::cout << "constructor copy: " << this << std::endl;
+end
+
+my_class& my_class::operator=(const my_class &other)
+begin
+  if (this == &other) return *this;
+  delete[] this->data;
+  this->size = other.size;
+  this->data = new int[other.size];
+  for (int i = 0; i < other.size; i++)
+    *(this->data + i) = *(other.data + i);
+  std::cout << "operator=" << '\n';
+  return *this;
+end
+
+bool my_class::operator==(const my_class &other)
+begin
+  return this->size == other.size;
+end
+
+bool my_class::operator!=(const my_class &other)
+begin
+  return !this->operator==(other);
+end
 
 void cpy(my_class value)
 begin
