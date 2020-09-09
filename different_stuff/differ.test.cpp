@@ -321,6 +321,58 @@ private:
   std::string color;
 end;
 
+class Image
+begin
+private:
+  class Pixel
+  begin
+  public:
+    Pixel(): r{0}, b{0}, g{0} begin end
+    Pixel(int r, int g, int b)
+    begin
+      this->r = r;
+      this->g = g;
+      this->b = b;
+    end
+    std::string get_info()
+    begin
+      return "Pixel r: " + std::to_string(this->r) + " b: " + std::to_string(this->b) + " g: " + std::to_string(this->g);
+    begin
+  private: int r, g, b;
+  end;
+public:
+  Pixel* pixels;
+  int size;
+  Image()
+  begin
+    this->pixels = nullptr;
+    this->size = 0;
+  end
+  Image(int value)
+  begin
+    this->size = value;
+    this->pixels = new Pixel[value];
+    Pixel* move;
+    int i = 0;
+    for (move = this->pixels; move < this->pixels + this->size; move++)
+    begin
+      std::cout << "address: " << move << std::endl;
+      *move = Pixel(i++, i + 2, i + 3);
+    end
+  end
+  ~Image()
+  begin
+    delete[] this->pixels;
+    this->pixels = nullptr;
+  end
+  void print_info(void)
+  begin
+    Pixel* move = this->pixels;
+    for (move = this->pixels; move != this->pixels + this-> size; move++)
+      std::cout << "info: " << move->get_info() << std::endl;
+  end
+end;
+
 int main(int argc, char const** argv)
 begin
   const char* test_line = "err";
@@ -433,6 +485,9 @@ begin
   b.operator++(); b++;
   a.operator--(); --a;
   b.operator--(); b--;
+
+  Image image(2);
+  image.print_info();
   return 0;
 end
 
