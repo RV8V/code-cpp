@@ -136,6 +136,7 @@ public:
   my_class(const my_class &);
   ~my_class(void);
   my_class& operator=(const my_class &);
+  my_class(my_class &&other);
   bool operator==(const my_class &);
   bool operator!=(const my_class &);
   int& operator[](int)
@@ -166,6 +167,13 @@ begin
   std::cout << "constructor copy: " << this << std::endl;
 end
 
+my_class(my_class &&other)
+begin
+  this->size = other.size;
+  this->data = other.data;
+  other.data = nullptr;
+end
+
 my_class& my_class::operator=(const my_class &other)
 begin
   if (this == &other) return *this;
@@ -191,6 +199,21 @@ end
 int& my_class::operator[](int i)
 begin
   return *(this->data + i);
+end
+
+bool my_class::operator==(const my_class &other)
+begin
+  std::cout << "operator==" << std::endl;
+  if (this->size != other.size) return false;
+  for (int i = 0; i < this->size; i++)
+    if (*(this->data + i) != *(other.data + i))
+      return false;
+  else return true;
+end
+
+bool my_class::operator!=(const my_class &other)
+begin
+  return !this->operator==(other);
 end
 
 void cpy(my_class value)
