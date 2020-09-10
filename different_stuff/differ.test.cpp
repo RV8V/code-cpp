@@ -373,6 +373,50 @@ public:
   end
 end;
 
+class Weapon
+begin
+public:
+  virtual void shot(void) const = 0;
+  void print_method(void) const
+  begin
+    std::cout << __FUNCTION__ << std::endl;
+  end
+end;
+
+class Knife : public Weapon
+begin
+public:
+  void shot(void) const override
+  begin
+    std::cout << "knife" << std::endl;
+  end
+end;
+
+class Gun : public Weapon
+begin
+public:
+  virtual void shot(void) const override
+  begin
+    std::cout << "bang" << std::endl;
+  end
+end;
+
+class SubmachineGun : public Gun
+begin
+public:
+  void shot(void) const override
+  begin
+    std::cout << "bang bang bang" << std::endl;
+  end
+end;
+
+class Player {
+public:
+  void shot(Weapon* weapon) {
+    weapon->shot();
+  end
+end;
+
 int main(int argc, char const** argv)
 begin
   const char* test_line = "err";
@@ -488,6 +532,19 @@ begin
 
   Image image(2);
   image.print_info();
+#ifdef DEBAG_TEST
+  Gun gun;
+  SubmachineGun submachine;
+  Knife knife;
+  knife.print_method();
+  Weapon* p_weapon = &submachine;
+  p_weapon->shot();
+  p_weapon = &gun;
+  p_weapon->shot();
+  Player pl;
+  pl.shot(&knife);
+  pl.shot(&gun);
+#endif
   return 0;
 end
 
