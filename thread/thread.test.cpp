@@ -1,6 +1,8 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <functional>
+#include <memory>
 
 #define SLEEP_TIME 1000
 #define CYCLE_VALUE 10
@@ -18,10 +20,16 @@ int main(int, const char** const) {
   int a = 1, b = 2;
   //thread th(do_work, ref(a), ref(b));
   //do_work(a, b);
-  int result;
+
+  int result = 1;
   thread t([&result]() {
     return result = return_same(20);
   });
+
+  function<int()> f = [result]() mutable {
+    cout << __FUNCTION__ << endl;
+    return result *= 2;
+  };
 
   for (size_t i = 0; i < 10; ++i) {
     cout << "id of thread -> "
