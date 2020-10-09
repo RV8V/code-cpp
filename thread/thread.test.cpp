@@ -29,12 +29,21 @@ void test_deadlock(void);
 void print_rect_dead_a(const char ch);
 void print_rect_dead_b(const char ch);
 
+void recursive_mutex_test(void);
+void cout_back(int);
+
+void unique_lock_test(void);
+void emulate_test_a(void);
+void emulate_test_b(void);
+
 /*
  * synchronization primitives
  * shared data protection
  * thread synchronization
  * interlocking of deadlock
  * lock_guard - mutex++
+ * recursive mutex
+ * unique_lock mutex
 */
 
 class MyClass {
@@ -61,8 +70,11 @@ public:
 mutex mtx, tmp_mtx;
 
 int main(int, const char** const) {
+  unique_lock_test();
+  recursive_mutex_test();
+  cout_back(10);
   test_deadlock();
-  /*const char ch_a = '&';
+  const char ch_a = '&';
   const char ch_u = '*';
   const char arr[] = { ch_a, ch_u };
 
@@ -80,11 +92,11 @@ int main(int, const char** const) {
   t1.join();
   t2.join();
 
-  timer.~Timer();*/
+  timer.~Timer();
 
-  /*int a = 1, b = 2;
-  //thread th(do_work, ref(a), ref(b));
-  //do_work(a, b);
+  int a = 1, b = 2;
+  thread th(do_work, ref(a), ref(b));
+  do_work(a, b);
 
   MyClass test_h;
   test_h.print_this();
@@ -133,7 +145,7 @@ int main(int, const char** const) {
       m.do_work_test();
       cout << '\n' << '\n';
 
-      thread value_info_deeped(([]() { std::cout << "/* message *//*" << '\n'; }));
+      thread value_info_deeped(([]() { std::cout << "/* message */" << '\n'; }));
       value_info_deeped.detach();
     });
 
@@ -157,7 +169,7 @@ int main(int, const char** const) {
 
   cout << "value of a -> " << a
       << " value of b -> " << b << endl
-      << "value of result -> " << result << endl;*/
+      << "value of result -> " << result << endl;
   return 0;
 }
 
@@ -287,6 +299,70 @@ void test_deadlock(void) {
 
   thread t1(print_rect_dead_a, '*');
   thread t2(print_rect_dead_b, '%');
+
+  t1.join();
+  t2.join();
+
+  return;
+}
+
+recursive_mutex rm;
+mutex m;
+
+void cout_back(int a) {
+  rm.lock();
+  cout << a << " ";
+  this_thread::sleep_for(chrono::milliseconds(50));
+
+  if (a <= 1) {
+    cout << endl;
+    rm.unlock();
+    return;
+  }
+
+  a--;
+  cout_back(a);
+  rm.unlock();
+}
+
+void recursive_mutex_test(void) {
+  Timer timer;
+
+  thread t1(cout_back, 10);
+  thread t2(cout_back, 10);
+
+  t1.join();
+  t2.join();
+
+  return;
+}
+
+mutex mut;
+
+void emulate_test_a(void) {
+  this_thread::sleep_for(chrono::milliseconds(1000));
+  lock_guard<mutex> lg(mut);
+  cout << "unique_lock testing" << endl;
+
+  this_thread::sleep_for(chrono::milliseconds(1000));
+  return;
+}
+
+void emulate_test_b(void) {
+  this_thread::sleep_for(chrono::milliseconds(1000));
+  unique_lock<mutex> ul(mut, defer_lock);
+  ul.lock();
+  cout << "unique_lock testing" << endl;
+  ul.unlock();
+  this_thread::sleep_for(chrono::milliseconds(1000));
+  return;
+}
+
+void unique_lock_test(void) {
+  Timer timer;
+
+  thread t1(emulate_test_a);
+  thread t2(emulate_test_b);
 
   t1.join();
   t2.join();
