@@ -12,9 +12,29 @@
 
 using namespace std;
 
+class MyClass;
+
 void do_work_a(void);
 void do_work(int&, int&);
 int return_same(int);
+
+class MyClass {
+public:
+  MyClass() {}
+  ~MyClass() {}
+public:
+  void do_work(void) {
+    this_thread::sleep_for(chrono::milliseconds(1000));
+    cout << endl << "|------| " << "(hello world from) " << __FUNCTION__ << " " << "|------|" << endl;
+  }
+  int do_work_int(int value) {
+    this_thread::sleep_for(chrono::milliseconds(1000));
+    return value * 10;
+  }
+  void do_work_test(void) {
+    std::cout << "/* message */" << __FUNCTION__ << "/* message */" << endl;
+  }
+};
 
 int main(int, const char** const) {
   int a = 1, b = 2;
@@ -31,6 +51,40 @@ int main(int, const char** const) {
     return result *= 2;
   };
 
+  thread test([&result]() {
+    this_thread::sleep_for(chrono::milliseconds(1000));
+    cout << "=====\tsleep in lambda function for 1000\t====="
+         << endl;
+    MyClass m;
+    result = m.do_work_int(result);
+  });
+
+  MyClass m;
+  thread m_class(&MyClass::do_work, m);
+  thread m_class_int(&MyClass::do_work_int, m, result);
+
+  thread deep([=]() mutable {
+    MyClass m;
+    function<void(void)> f = [&]() { m.do_work_test(); }; f();
+    ([]() { std::cout << "/* message */" << endl; })();
+    this_thread::sleep_for(chrono::milliseconds(1000));
+
+    thread value_info([&]() {
+      cout << '\n' << '\n';
+      m.do_work_test();
+      cout << '\n' << '\n';
+
+      thread value_info_deeped(([]() { std::cout << "/* message */" << '\n'; }));
+      value_info_deeped.detach();
+    });
+
+    value_info.detach();
+  });
+
+  deep.detach();
+  m_class.detach();
+  m_class_int.detach();
+
   for (size_t i = 0; i < 10; ++i) {
     cout << "id of thread -> "
       << this_thread::get_id()
@@ -40,6 +94,8 @@ int main(int, const char** const) {
   }
 
   t.join();
+  test.join();
+
   cout << "value of a -> " << a
       << " value of b -> " << b << endl
       << "value of result -> " << result << endl;
