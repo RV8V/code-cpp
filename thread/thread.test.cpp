@@ -18,6 +18,12 @@ void do_work_a(void);
 void do_work(int&, int&);
 int return_same(int);
 
+/*
+ * synchronization primitives
+ * shared data protection
+ * thread synchronization
+*/
+
 class MyClass {
 public:
   MyClass() {}
