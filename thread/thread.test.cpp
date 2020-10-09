@@ -12,13 +12,18 @@ using namespace std;
 
 void do_work_a(void);
 void do_work(int&, int&);
+int return_same(int);
 
 int main(int, const char** const) {
   int a = 1, b = 2;
-  thread th(do_work, ref(a), ref(b));
-  do_work(a, b);
+  //thread th(do_work, ref(a), ref(b));
+  //do_work(a, b);
+  int result;
+  thread t([&result]() {
+    return result = return_same(20);
+  });
 
-  for (size_t i = 0; true; ++i) {
+  for (size_t i = 0; i < 10; ++i) {
     cout << "id of thread -> "
       << this_thread::get_id()
       << " " << __FUNCTION__ << " "
@@ -26,9 +31,10 @@ int main(int, const char** const) {
     this_thread::sleep_for(chrono::milliseconds(SLEEP_TIME / 2));
   }
 
-  th.join();
-  cout << a << " " << b << endl;
-
+  t.join();
+  cout << "value of a -> " << a
+      << " value of b -> " << b << endl
+      << "value of result -> " << result << endl;
   return 0;
 }
 
@@ -46,7 +52,13 @@ void do_work(int& a, int& b) {
   cout << "id: " << this_thread::get_id() << " " << "======\t" << __FUNCTION__ << " STARTED" << "\t\t======" << endl;
   this_thread::sleep_for(chrono::milliseconds(SECOND_SLEEP));
   a *= FIRST_SLEEP, b *= SECOND_SLEEP;
-  //this_thread::sleep_for(chrono::milliseconds(THIRD_SLEEP));
+  this_thread::sleep_for(chrono::milliseconds(THIRD_SLEEP));
   cout << "id: " << this_thread::get_id() << " " << "======\t" << __FUNCTION__ << " STOPPED" << "\t\t======" << endl;
   return;
+}
+
+int return_same(int a) {
+  this_thread::sleep_for(chrono::milliseconds(200));
+  cout << "in thread" << endl;
+  return a;
 }
