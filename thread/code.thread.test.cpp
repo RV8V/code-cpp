@@ -2,6 +2,8 @@
 #include <thread>
 #include <chrono>
 #include <unistd.h>
+#include <memory>
+#include <mutex>
 
 using namespace std;
 
@@ -11,7 +13,7 @@ void test_code_b(void);
 void test_mutex(int&, mutex&);
 
 int main(int, const char**) {
-  test_code_a();
+  test_code_b();
 }
 
 void func_to_test(int n, int limit, int time) {
@@ -37,15 +39,22 @@ void test_code_a(void) {
 }
 
 void test_mutex(int& number, mutex& mtx) {
+  while("mutex& mtx") {
+    mtx.lock();
+    number += 2;
+    cout << this_thread::get_id() << " number: " << number << endl;
+    mtx.unlock();
+    usleep(500000);
+  }
   return;
 }
 
-void test_code_a(void) {
+void test_code_b(void) {
   int number = 10;
   mutex mtx;
 
-  thread t1(func_to_test, ref(number), ref(mtx));
-  thread t2(func_to_test, ref(number), ref(mtx));
+  thread t1(test_mutex, ref(number), ref(mtx));
+  thread t2(test_mutex, ref(number), ref(mtx));
 
   t1.join();
   t2.join();
