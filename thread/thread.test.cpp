@@ -1,14 +1,18 @@
-#include <iostream>
 #include <thread>
-#include <chrono>
 #include <functional>
 #include <memory>
+#include <mutex>
+
+#include "timer.h"
 
 #define SLEEP_TIME 1000
 #define CYCLE_VALUE 10
 #define FIRST_SLEEP 1000
 #define SECOND_SLEEP 2000
 #define THIRD_SLEEP 1000
+#define INNER_CYCLE 10
+#define OUT_CYCLE 5
+#define MILISS 20
 
 using namespace std;
 
@@ -17,6 +21,8 @@ class MyClass;
 void do_work_a(void);
 void do_work(int&, int&);
 int return_same(int);
+
+void print(const char);
 
 /*
  * synchronization primitives
@@ -45,8 +51,29 @@ public:
   }
 };
 
+mutex mtx;
+
 int main(int, const char** const) {
-  int a = 1, b = 2;
+  const char ch_a = '&';
+  const char ch_u = '*';
+  const char arr[] = { ch_a, ch_u };
+
+  Timer timer;
+
+  thread t1(print, ch_a);
+  thread t2(print, ch_u);
+
+  int i = 1;
+  do {
+    print(*(arr + i));
+  } while (i-- > 0);
+
+  t1.join();
+  t2.join();
+
+  timer.~Timer();
+
+  /*int a = 1, b = 2;
   //thread th(do_work, ref(a), ref(b));
   //do_work(a, b);
 
@@ -89,7 +116,7 @@ int main(int, const char** const) {
   thread deep([=]() mutable {
     MyClass m;
     function<void(void)> f = [&]() { m.do_work_test(); }; f();
-    ([]() { std::cout << "/* message */" << endl; })();
+    ([]() { std::cout << "/* message *//*" << endl; })();
     this_thread::sleep_for(chrono::milliseconds(1000));
 
     thread value_info([&]() {
@@ -97,7 +124,7 @@ int main(int, const char** const) {
       m.do_work_test();
       cout << '\n' << '\n';
 
-      thread value_info_deeped(([]() { std::cout << "/* message */" << '\n'; }));
+      thread value_info_deeped(([]() { std::cout << "/* message *//*" << '\n'; }));
       value_info_deeped.detach();
     });
 
@@ -121,7 +148,7 @@ int main(int, const char** const) {
 
   cout << "value of a -> " << a
       << " value of b -> " << b << endl
-      << "value of result -> " << result << endl;
+      << "value of result -> " << result << endl;*/
   return 0;
 }
 
@@ -145,7 +172,25 @@ void do_work(int& a, int& b) {
 }
 
 int return_same(int a) {
-  this_thread::sleep_for(chrono::milliseconds(200));
+  this_thread::sleep_for(chrono::milliseconds(MILISS * 10));
   cout << "in thread" << endl;
   return a;
+}
+
+void print(const char ch) {
+  this_thread::sleep_for(chrono::milliseconds(MILISS));
+
+  mtx.lock();
+  for (int i = 0; i < OUT_CYCLE; ++i) {
+    for (int i = 0; i < INNER_CYCLE; ++i) {
+      cout << ch;
+      this_thread::sleep_for(chrono::milliseconds(MILISS));
+    }
+    cout << endl;
+  }
+  cout << endl;
+  mtx.unlock();
+
+  this_thread::sleep_for(chrono::milliseconds(MILISS));
+  return;
 }
