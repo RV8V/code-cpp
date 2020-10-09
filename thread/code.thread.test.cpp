@@ -7,6 +7,8 @@ using namespace std;
 
 void func_to_test(int, int, int);
 void test_code_a(void);
+void test_code_b(void);
+void test_mutex(int&, mutex&);
 
 int main(int, const char**) {
   test_code_a();
@@ -31,5 +33,22 @@ void test_code_a(void) {
   t2.detach();
 
   cout << __FUNCTION__ << " () -> " << this_thread::get_id() << endl;
+  return;
+}
+
+void test_mutex(int& number, mutex& mtx) {
+  return;
+}
+
+void test_code_a(void) {
+  int number = 10;
+  mutex mtx;
+
+  thread t1(func_to_test, ref(number), ref(mtx));
+  thread t2(func_to_test, ref(number), ref(mtx));
+
+  t1.join();
+  t2.join();
+
   return;
 }
