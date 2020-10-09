@@ -34,12 +34,29 @@ public:
   void do_work_test(void) {
     std::cout << "/* message */" << __FUNCTION__ << "/* message */" << endl;
   }
+  void print_this(void) {
+    cout << (void*)this << endl;
+  }
 };
 
 int main(int, const char** const) {
   int a = 1, b = 2;
   //thread th(do_work, ref(a), ref(b));
   //do_work(a, b);
+
+  MyClass test_h;
+  test_h.print_this();
+
+  cout << "==================== " << __FUNCTION__ << " ====================" << endl;
+  thread class_testing(&MyClass::do_work, &test_h);
+  cout << "address: " << (void*)&test_h << endl;
+
+  thread class_testing_copy(&MyClass::do_work, test_h);
+  cout << "address: " << (void*)&test_h << endl;
+
+  class_testing.join();
+  class_testing_copy.join();
+  cout << "==================== " << __FUNCTION__ << " ====================" << endl;
 
   int result = 1;
   thread t([&result]() {
