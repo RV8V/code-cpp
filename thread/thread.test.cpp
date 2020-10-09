@@ -23,11 +23,18 @@ void do_work(int&, int&);
 int return_same(int);
 
 void print(const char);
+void print_guard(const char);
+
+void test_deadlock(void);
+void print_rect_dead_a(const char ch);
+void print_rect_dead_b(const char ch);
 
 /*
  * synchronization primitives
  * shared data protection
  * thread synchronization
+ * interlocking of deadlock
+ * lock_guard - mutex++
 */
 
 class MyClass {
@@ -51,10 +58,11 @@ public:
   }
 };
 
-mutex mtx;
+mutex mtx, tmp_mtx;
 
 int main(int, const char** const) {
-  const char ch_a = '&';
+  test_deadlock();
+  /*const char ch_a = '&';
   const char ch_u = '*';
   const char arr[] = { ch_a, ch_u };
 
@@ -65,13 +73,14 @@ int main(int, const char** const) {
 
   int i = 1;
   do {
+    print_guard(*(arr + i));
     print(*(arr + i));
   } while (i-- > 0);
 
   t1.join();
   t2.join();
 
-  timer.~Timer();
+  timer.~Timer();*/
 
   /*int a = 1, b = 2;
   //thread th(do_work, ref(a), ref(b));
@@ -192,5 +201,95 @@ void print(const char ch) {
   mtx.unlock();
 
   this_thread::sleep_for(chrono::milliseconds(MILISS));
+  return;
+}
+
+void print_guard(const char ch) {
+  this_thread::sleep_for(chrono::milliseconds(MILISS));
+
+  lock_guard<mutex> guard(mtx);
+  int i = 0;
+
+  {
+    lock_guard<mutex> lock(tmp_mtx);
+    this_thread::sleep_for(chrono::milliseconds(MILISS));
+    cout << "mutex lock via lock_guard" << endl << __FUNCTION__ << endl;
+    this_thread::sleep_for(chrono::milliseconds(MILISS));
+  }
+
+  {
+    this_thread::sleep_for(chrono::milliseconds(MILISS));
+
+    tmp_mtx.lock();
+    cout << "mutex lock via lock and unlock" << endl << __FUNCTION__ << endl;
+    tmp_mtx.unlock();
+
+    this_thread::sleep_for(chrono::milliseconds(MILISS));
+  }
+
+  do {
+    do {
+      cout << ch;
+      this_thread::sleep_for(chrono::milliseconds(MILISS));
+    }
+    while(i++ < INNER_CYCLE);
+    cout << endl;
+  }
+  while(i++ < OUT_CYCLE);
+  cout << endl;
+
+  return;
+}
+
+mutex m1;
+mutex m2;
+
+void print_rect_dead_b(const char ch) {
+  m2.lock();
+  cout << "enter to grap second resource" << endl;
+  m1.lock();
+
+  for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 5; ++i) {
+      cout << ch;
+    }
+    cout << endl;
+  }
+  cout << endl;
+
+  m1.lock();
+  m2.lock();
+
+  return;
+}
+
+void print_rect_dead_a(const char ch) {
+  m1.lock();
+  cout << "enter to grap first resource" << endl;
+  m2.lock();
+
+  for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 5; ++i) {
+      cout << ch;
+    }
+    cout << endl;
+  }
+  cout << endl;
+
+  m1.lock();
+  m2.lock();
+
+  return;
+}
+
+void test_deadlock(void) {
+  Timer timer;
+
+  thread t1(print_rect_dead_a, '*');
+  thread t2(print_rect_dead_b, '%');
+
+  t1.join();
+  t2.join();
+
   return;
 }
