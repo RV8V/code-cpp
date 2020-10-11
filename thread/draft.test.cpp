@@ -15,8 +15,11 @@ void task_lambda_error(void);
 void task_thread(void);
 void test_bind(void);
 void test_promise(void);
+void test_deffered(void);
 
 int main(void) {
+  test_deffered();
+  //test_promise();
   //task_lambda_error();
   //task_thread();
   //test_bind();
@@ -87,4 +90,30 @@ void test_promise(void) {
   thread promise_thread(ref(call), numeric_limits<size_t>::max() - 5000);
   promise_thread.detach();
   waiter.get();
+}
+
+void test_deffered(void) {
+  cout << "id of main thread -> " << this_thread::get_id() << endl;
+
+  auto async_default = async([]() {
+    cout << "async_default: " << __FUNCTION__ << " and thread id is -> " << this_thread::get_id() << endl;
+    return 10;
+  });
+
+  auto async_deffered = async(launch::deferred, [](const string& str) {
+    cout << "async_deffered: " << __FUNCTION__ << " -> value -> " << str << " -> id -> " << this_thread::get_id() << endl;
+    return 20;
+  }, string("hello world"));
+
+  auto async_async = async([]() {
+    cout << "async_async: " << __FUNCTION__ << " and thread id is -> " << this_thread::get_id() << endl;
+    return 30;
+  });
+
+  this_thread::sleep_for(chrono::milliseconds(2000));
+  cout << "sleep ended" << endl;
+  int result_default = async_default.get();
+  int result_deferred = async_deffered.get();
+  int result_async = async_async.get();
+  cout << "default: " << result_default << " deferred: " << result_default << " async: " << result_async << endl;
 }
