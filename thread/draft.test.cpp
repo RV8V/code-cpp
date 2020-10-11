@@ -52,7 +52,7 @@ void task_thread(void) {
   });
   future<int> ft = functor.get_future();
   int value_a = 2, value_b = 4;
-  thread future_thread(functor, value_a, value_b);
+  thread future_thread(ref(functor), value_a, value_b);
   future_thread.join();
   cout << "result is -> " << ft.get() << endl;
 }
