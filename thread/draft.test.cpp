@@ -5,6 +5,7 @@
 #include <cmath>
 #include <functional>
 #include <limits>
+#include <exception>
 
 using namespace std;
 
@@ -17,14 +18,21 @@ void test_bind(void);
 void test_promise(void);
 void test_deffered(void);
 
+void test_bad_alloc(void);
+void test_bad_alloc_next(void);
+void future_exception(void);
+
 int main(void) {
+  future_exception();
+  test_bad_alloc();
+  test_bad_alloc_next();
   test_deffered();
-  //test_promise();
-  //task_lambda_error();
-  //task_thread();
-  //test_bind();
-  //int sum = function_to_test(5, 1, 2);
-  //cout << "sum: " << sum << endl;
+  test_promise();
+  task_lambda_error();
+  task_thread();
+  test_bind();
+  int sum = function_to_test(5, 1, 2);
+  cout << "sum: " << sum << endl;
   return 0;
 }
 
@@ -116,4 +124,39 @@ void test_deffered(void) {
   int result_deferred = async_deffered.get();
   int result_async = async_async.get();
   cout << "default: " << result_default << " deferred: " << result_default << " async: " << result_async << endl;
+}
+
+void test_bad_alloc(void) {
+  exception_ptr strored_pointer;
+  try {
+    throw bad_alloc();
+  } catch (const exception&) {
+    cout << "error was handled" << endl;
+    strored_pointer = current_exception();
+  }
+}
+
+void test_bad_alloc_next(void) {
+  exception_ptr strored_pointer = make_exception_ptr(bad_alloc());
+}
+
+void future_exception(void) {
+  auto first = async(launch::async, [] {
+    throw bad_alloc();
+  });
+  auto second = async(launch::async, [] {
+    throw bad_alloc();
+  });
+  auto third = async(launch::deferred, [] {
+    throw bad_alloc();
+  });
+
+  try {
+    first.get();
+    second.get();
+  } catch (const exception&) {
+    cout << "catch exception from the first and second\n";
+  }
+  third.wait();
+  cout << "third has been ended\n";
 }
