@@ -12,12 +12,14 @@ int function_to_test(int, ...);
 int f(int, int);
 void task_lambda_error(void);
 void task_thread(void);
+void test_bind(void);
 
 int main(void) {
-  task_lambda_error();
-  task_thread();
-  int sum = function_to_test(5, 1, 2);
-  cout << "sum: " << sum << endl;
+  //task_lambda_error();
+  //task_thread();
+  test_bind();
+  //int sum = function_to_test(5, 1, 2);
+  //cout << "sum: " << sum << endl;
   return 0;
 }
 
@@ -55,4 +57,14 @@ void task_thread(void) {
   thread future_thread(ref(functor), value_a, value_b);
   future_thread.join();
   cout << "result is -> " << ft.get() << endl;
+}
+
+void test_bind(void) {
+  int value = 0;
+  packaged_task<int(int)> functor(bind([](int a) {
+    return a * a;
+  }, value = 3));
+  future<int> ft = functor.get_future();
+  functor(value = 2);
+  cout << "bind -> " << ft.get() << endl;
 }
