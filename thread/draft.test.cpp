@@ -4,6 +4,7 @@
 #include <future>
 #include <cmath>
 #include <functional>
+#include <limits>
 
 using namespace std;
 
@@ -13,11 +14,12 @@ int f(int, int);
 void task_lambda_error(void);
 void task_thread(void);
 void test_bind(void);
+void test_promise(void);
 
 int main(void) {
   //task_lambda_error();
   //task_thread();
-  test_bind();
+  //test_bind();
   //int sum = function_to_test(5, 1, 2);
   //cout << "sum: " << sum << endl;
   return 0;
@@ -67,4 +69,22 @@ void test_bind(void) {
   future<int> ft = functor.get_future();
   functor(value = 2);
   cout << "bind -> " << ft.get() << endl;
+}
+
+void test_promise(void) {
+  shared_ptr<promise<void>> p_promise = make_shared<promise<void>>();
+  future<void> waiter = p_promise->get_future();
+  auto call = [p_promise](size_t value) {
+    size_t i = numeric_limits<size_t>::max();
+    while(true) {
+      if (value == i--) {
+        p_promise->set_value();
+        cout << "value has been getted" << endl;
+        break;
+      }
+    }
+  };
+  thread promise_thread(ref(call), numeric_limits<size_t>::max() - 5000);
+  promise_thread.detach();
+  waiter.get();
 }
