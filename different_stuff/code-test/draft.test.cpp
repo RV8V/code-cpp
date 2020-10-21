@@ -51,6 +51,44 @@ public:
   }
 };
 
+template<typename Y>
+class smart_pointer_test {
+private:
+  Y* m_data;
+public:
+  smart_pointer_test(Y* data): m_data(data) {
+  }
+  ~smart_pointer_test() {
+    delete this->m_data;
+  }
+
+  Y& operator*() const {
+    return *this->m_data;
+  }
+  Y* operator->() const {
+    return this->m_data;
+  }
+};
+
+struct my_struct {
+private:
+  int a, b;
+public:
+  my_struct(int a, int b) {
+    this->a = a;
+    this->b = b;
+  }
+
+  void do_smth(void) {
+    cout << "hello world" << endl;
+  }
+};
+
+int test(void) {
+  smart_pointer_test<my_struct> p_struct(new my_struct(1, 2));
+  p_struct->do_smth();
+}
+
 int main(int, const char**) {
 #ifdef value
   int* ptr = new int(4);
@@ -84,5 +122,20 @@ int main(int, const char**) {
   cout << *p << endl;
 #endif
 
+#ifdef auto_testing
+  auto_ptr<my_struct> p1(new my_struct);
+  auto_ptr<my_struct> p2;
+  p2 = p1;
+#endif
+
+  shared_ptr<my_struct> p1(new my_struct(1, 2));
+  shared_ptr<my_struct> p2;
+  p2 = p1;
+  if (p2) {
+    p2->do_smth();
+    p1->do_smth();
+  }
+  
+  p2->do_smth();
   return EXIT_SUCCESS;
 }
