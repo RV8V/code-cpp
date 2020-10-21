@@ -31,6 +31,26 @@ T& smart_pointer<T>::operator*(void) {
   return *this->ptr;
 }
 
+class video_buffer {
+private:
+  int* pixels;
+public:
+  video_buffer(int buffer_size) {
+    this->pixels = new int[buffer_size];
+  }
+  ~video_buffer(void) {
+    delete[] this->pixels;
+  }
+
+  void make_frame(void) {
+  }
+
+  int game(void) {
+    video_buffer screen(10);
+    screen.make_frame();
+  }
+};
+
 int main(int, const char**) {
 #ifdef value
   int* ptr = new int(4);
@@ -57,6 +77,11 @@ int main(int, const char**) {
 #ifdef auto_ptr_test
   auto_ptr<int> ap1(new int(3));
   auto_ptr<int> ap2(ap1);
+#endif
+
+#ifdef segmentation_falt
+  int* p;
+  cout << *p << endl;
 #endif
 
   return EXIT_SUCCESS;
