@@ -84,12 +84,61 @@ public:
   }
 };
 
+template<typename T>
+class auto_ptr_t {
+private:
+  T* m_ptr;
+public:
+  auto_ptr_t(T* ptr = nullptr): m_ptr(ptr) {
+  }
+
+  auto_ptr_t(auto_ptr_t& a) {
+    m_ptr = a.m_ptr;
+    a.m_ptr = nullptr;
+  }
+
+  auto_ptr_t& operator=(auto_ptr_t& a) {
+    if (&a == this)
+      return *this;
+    delete m_ptr;
+    m_ptr = a.m_ptr;
+    a.m_ptr = nullptr;
+    return *this;
+  }
+
+  T& operator*() { return *m_ptr; }
+  T* operator->() { return m_ptr; }
+  bool isNull() const { return m_ptr == nullptr; }
+
+  ~auto_ptr_t() {
+    delete m_ptr;
+  }
+};
+
+class Item {
+public:
+  Item() { cout << "item acquired\n"; }
+  ~Item() { cout << "Iten destroyed\n"; }
+};
+
 int test(void) {
   smart_pointer_test<my_struct> p_struct(new my_struct(1, 2));
   p_struct->do_smth();
 }
 
 int main(int, const char**) {
+  auto_ptr_t<Item> item1(new Item);
+  auto_ptr_t<Item> item2;
+
+  cout << "item 1 " << (item1.isNull() ? "null\n" : "not null\n");
+  cout << "item 2 " << (item2.isNull() ? "null\n" : "not null\n");
+
+  item2 = item1;
+  cout << "ownership transferred\n";
+
+  cout << "item 1 " << (item1.isNull() ? "null\n" : "not null\n");
+  cout << "item 2 " << (item2.isNull() ? "null\n" : "not null\n");
+
 #ifdef value
   int* ptr = new int(4);
   int value = 4;
@@ -128,6 +177,7 @@ int main(int, const char**) {
   p2 = p1;
 #endif
 
+#ifdef shared
   shared_ptr<my_struct> p1(new my_struct(1, 2));
   shared_ptr<my_struct> p2;
   p2 = p1;
@@ -135,7 +185,8 @@ int main(int, const char**) {
     p2->do_smth();
     p1->do_smth();
   }
-  
+
   p2->do_smth();
+#endif
   return EXIT_SUCCESS;
 }
