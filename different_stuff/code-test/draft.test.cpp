@@ -127,6 +127,7 @@ int test(void) {
 }
 
 int main(int, const char**) {
+#ifdef value_auto
   auto_ptr_t<Item> item1(new Item);
   auto_ptr_t<Item> item2;
 
@@ -138,6 +139,7 @@ int main(int, const char**) {
 
   cout << "item 1 " << (item1.isNull() ? "null\n" : "not null\n");
   cout << "item 2 " << (item2.isNull() ? "null\n" : "not null\n");
+#endif
 
 #ifdef value
   int* ptr = new int(4);
