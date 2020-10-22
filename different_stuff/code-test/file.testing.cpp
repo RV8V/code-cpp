@@ -10,6 +10,7 @@ public:
   ~my_list();
 
   void push_back(T data);
+  void pop_front();
   int get_size();
 
   T& operator[](const int);
@@ -35,6 +36,14 @@ template<typename T>
 my_list<T>::my_list() {
   this->size = 0;
   this->head = nullptr;
+}
+
+template<typename T>
+void my_list<T>::pop_front() {
+  node<T>* temp = this->head;
+  this->head = this->head->p_next;
+  delete temp;
+  --this->size;
 }
 
 template<typename T>
@@ -85,6 +94,7 @@ T& my_list<T>::operator[](const int index) {
 
 template<typename T>
 my_list<T>::~my_list() {
+
 }
 
 int main(int, const char**) {
@@ -99,5 +109,9 @@ int main(int, const char**) {
   do {
     cout << "current value in list -> " << list + i << endl;
   } while(i-- > 0);
+
+  list.pop_front();
+  for (int i = 0; i < list.get_size(); ++i)
+    cout << "data: " << list + i << endl;
   return EXIT_SUCCESS;
 }
