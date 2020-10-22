@@ -211,6 +211,14 @@ int main(int, const char**) {
 #ifdef shared_ptr_testing
   shared_ptr<my_struct> st(new my_struct(2, 8));
   auto st2 = make_shared<my_struct>(3, 6);
-#endif  
+#endif
+
+  const int size = 7;
+  int* arr = (int*)new int[size]{ 1, 2, 3, 4, 5, 6, 7 };
+  shared_ptr<int[]> ptr(arr);
+
+  for (int* move = arr; move != arr + size; ++move)
+    cout << "move: " << *move << endl;
+
   return EXIT_SUCCESS;
 }
