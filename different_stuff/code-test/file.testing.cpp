@@ -12,6 +12,7 @@ public:
   void push_back(T data);
   void pop_front();
   int get_size();
+  void clear();
 
   T& operator[](const int);
   T& operator+(const int);
@@ -44,6 +45,12 @@ void my_list<T>::pop_front() {
   this->head = this->head->p_next;
   delete temp;
   --this->size;
+}
+
+template<typename T>
+void my_list<T>::clear() {
+  while(this->size)
+    this->pop_front();
 }
 
 template<typename T>
@@ -94,7 +101,7 @@ T& my_list<T>::operator[](const int index) {
 
 template<typename T>
 my_list<T>::~my_list() {
-
+  this->clear();
 }
 
 int main(int, const char**) {
@@ -113,5 +120,10 @@ int main(int, const char**) {
   list.pop_front();
   for (int i = 0; i < list.get_size(); ++i)
     cout << "data: " << list + i << endl;
+
+  cout << "list size: " << list.get_size() << endl;
+  list.clear();
+  cout << "list size: " << list.get_size() << endl;
+
   return EXIT_SUCCESS;
 }
