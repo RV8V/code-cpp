@@ -190,5 +190,27 @@ int main(int, const char**) {
 
   p2->do_smth();
 #endif
+
+#ifdef testing
+  unique_ptr<my_struct> unq1(new my_struct(2, 0));
+  auto unq2 = make_unique<my_struct>(2, 0);
+  unq2->do_smth();
+  unq1->do_smth();
+
+  #ifdef fail
+  unique_ptr<my_struct> fail;
+  fail = unq1;
+  #endif
+
+  unique_ptr<my_struct> ok;
+  ok = move(unq1);
+  my_struct* data = ok.get();
+  data->do_smth();
+#endif
+
+#ifdef shared_ptr_testing
+  shared_ptr<my_struct> st(new my_struct(2, 8));
+  auto st2 = make_shared<my_struct>(3, 6);
+#endif  
   return EXIT_SUCCESS;
 }
