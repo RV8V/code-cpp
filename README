@@ -1,0 +1,10 @@
+Introduction
+============
+
+Some snippets of C++ code: final, override, lambda, smart pointers, pod types, user literals, templates, rvalue references &&, exception
+Win32Api code & different projects
+
+License and Authors
+===================
+
+Author:: Ruslan Volovik <rv.volovik88@gmail.com>
