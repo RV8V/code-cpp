@@ -1,0 +1,3 @@
+﻿  Source.cpp
+c:\users\administrator\source\repos\app_gui\app_gui\source.cpp(168): warning C4715: 'WindowProcedure': not all control paths return a value
+  APP_GUI.vcxproj -> C:\Users\Administrator\source\repos\APP_GUI\Debug\APP_GUI.exe
