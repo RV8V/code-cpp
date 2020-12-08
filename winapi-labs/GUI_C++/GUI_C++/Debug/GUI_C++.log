@@ -1,0 +1,4 @@
+﻿  Source.cpp
+c:\users\administrator\source\repos\gui_c++\gui_c++\source.cpp(155): warning C4715: 'WindowProcedure': not all control paths return a value
+c:\users\administrator\source\repos\gui_c++\gui_c++\source.cpp(217): warning C4715: 'DialogProcedure': not all control paths return a value
+  GUI_C++.vcxproj -> C:\Users\Administrator\source\repos\GUI_C++\Debug\GUI_C++.exe
