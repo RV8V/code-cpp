@@ -1,5 +1,0 @@
-﻿  app_ns.cpp
-  source.cpp
-  Generating Code...
-c:\users\administrator\source\repos\binvalueviewer\binvalueviewer\app_ns.cpp(99): warning C4715: 'c_app::application_proc': not all control paths return a value
-  BinValueViewer.vcxproj -> C:\Users\Administrator\source\repos\BinValueViewer\Debug\BinValueViewer.exe
