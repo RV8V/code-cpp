@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!--Created by Liquid XML 2008 (www.liquid-technologies.com) for ALTERA CORPORATION-->
+<ProgramExecution xmlns:xs="http://www.w3.org/2001/XMLSchema-instance">
+	<QuartusExecution>
+		<AddressBits>32</AddressBits>
+		<ApplicationError>
+		<CommandLine/>		<ErrorMessage></ErrorMessage>
+		<Line>405</Line>
+		<SourceFile>/quartus/tpi/eti/eti_tool_info_defaults_cpp.h</SourceFile>
+		<StackTrace>
+		</StackTrace>
+		<Subsystem>ETI</Subsystem>
+	</ApplicationError>
+	<Compilation>
+			<CompileID>0</CompileID>
+			<DeviceFamily/>
+			<IncrementalCompilation/>
+			<TopLevelEntityName/>
+		</Compilation>
+		<DateInvoked>2020/11/08 20:29:01</DateInvoked>
+		<ElapsedTime>6</ElapsedTime>
+		<IP>10.0.2.15</IP>
+		<IsInternal>false</IsInternal>
+		<IsQt>false</IsQt>
+		<License>
+			<Edition>Web Edition</Edition>
+			<LicenseHostID/>
+		</License>
+		<Machine>
+			<CPUCountLogical>1</CPUCountLogical>
+			<CPUCountPhysical>1</CPUCountPhysical>
+			<CPUSpeed>1800</CPUSpeed>
+			<Hostname>WIN-LFQ63P8OA7N</Hostname>
+			<NIC>
+				<Address>08002714de89</Address>
+			</NIC>
+			<OS>Windows Vista</OS>
+			<OSAddressBits>64</OSAddressBits>
+			<OSVersion>6.2</OSVersion>
+			<Platform>windows</Platform>
+			<ScreenResolution>unknown</ScreenResolution>
+			<TotalPhysicalRAM>4095</TotalPhysicalRAM>
+			<TotalVirtualRAM>0</TotalVirtualRAM>
+		</Machine>
+		<Name>quartus</Name>
+		<PeakMemoryUsed>0</PeakMemoryUsed>
+		<ProjectRevision>
+			<ProjectName/>
+			<Revision/>
+		</ProjectRevision>
+		<QuartusInstallation>
+			<InstallationID>8796748701321.160484912202224</InstallationID>
+			<Version>
+				<Build>350</Build>
+				<BuildSite>SJ</BuildSite>
+				<BuildSuffix/>
+				<Edition>Web Edition</Edition>
+				<ServicePack>2</ServicePack>
+				<VersionNumber>9.1</VersionNumber>
+			</Version>
+		</QuartusInstallation>
+		<QuartusUser>
+			<AlteraUserName/>
+			<FAEContactName/>
+			<TalkbackStatus>
+				<DateSet/>
+				<TalkbackOn>true</TalkbackOn>
+			</TalkbackStatus>
+			<UserID>8796748701321.160484917301288</UserID>
+			<UserName>Administrator</UserName>
+		</QuartusUser>
+	</QuartusExecution>
+	<SchemaVersion>schema_2009-08-20</SchemaVersion>
+</ProgramExecution>
+

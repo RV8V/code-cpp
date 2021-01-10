@@ -1,0 +1,7 @@
+|testing_one
+y <= inst9.DB_MAX_OUTPUT_PORT_TYPE
+x1 => gdfx_temp0.IN0
+x2 => gdfx_temp0.IN2
+x3 => gdfx_temp0.IN4
+
+
